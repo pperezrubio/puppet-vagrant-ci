@@ -1,0 +1,5 @@
+# Ignore Geppeto project file
+.project
+
+# Ignore vagrant private info
+.vagrant

@@ -1,0 +1,11 @@
+# This file is under SCM control; do not edit in-place.
+#
+# reprepro distribution definition
+Origin: BVOX WORLD, S.L.
+Label: BVOX
+Suite: stable
+Codename: squeeze
+Architectures: amd64
+Components: main
+Description:  BVOX APT Repository
+SignWith: 274A9167

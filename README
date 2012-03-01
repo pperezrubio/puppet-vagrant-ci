@@ -1,0 +1,25 @@
+This is a sample project showing how to create an environment of two servers provisioned by puppet
+
+Use vagrant up to create the virtual machines and "vagrant ssh demo1" or "vagrant ssh demo2" to connect to them.
+
+Each machine has shared folders pointing to host machine:
+
+    /vagrant -> "." of the host server
+    /tmp/vagrant-puppet/manifests -> ./manifests 
+    /tmp/vagrant-puppet/modules-0 -> ./modules
+
+The last two are defined by the setting in Vagrantfile
+
+    demo1_puppet.pp_path = "/tmp/vagrant-puppet"
+    demo1_puppet.manifests_path = "manifests"
+    demo1_puppet.module_path = "modules"
+
+
+After editing any recipe you can you 'puppet provision <server>' to apply the changes.
+
+
+When done, we can destroy the VM using "vagrant destroy"
+
+
+Dependencies
+A working rvm installed in user mode

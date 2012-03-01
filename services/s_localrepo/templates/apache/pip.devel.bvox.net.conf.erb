@@ -1,0 +1,52 @@
+# This file is under SCM control; do not edit in-place.
+#
+# Apache's virtual site for our local "cheeshop"
+<VirtualHost <%= pipserver %>:443>
+	ServerName <%= pipserver %>
+	ServerAdmin webmaster@bvox.net
+	ServerSignature On
+	
+	CustomLog /var/log/apache2/<%= pipserver %>.access.log combined
+	ErrorLog /var/log/apache2/<%= pipserver %>.error.log
+	LogLevel warn
+	
+# Secure access
+	SSLEngine On
+	# WARNING: These are bogus certificates built with the help of `make-ssl-cert generate-default-snakeoil`
+	# They should be changed for proper ones as soon as we put in production our own local CA
+	SSLCertificateFile /etc/ssl/certs/ssl-cert-snakeoil.pem
+	SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+	
+# static media provided by the chishop project
+	Alias /media/ <%= chishop_rootdir %>/chishop/media/
+	<Directory <%= chishop_rootdir %>/chishop/media/>
+		Order allow,deny
+		Allow from all
+	</Directory>
+# static media for admin resources provided by the django environment
+	Alias /admin/media/ <%= chishop_rootdir %>/parts/django/django/contrib/admin/media/
+	<Directory <%= chishop_rootdir %>/parts/django/django/contrib/admin/media/>
+		Order allow,deny
+		Allow from all
+	</Directory>
+# everything else is passed to the django app
+	WSGIScriptAlias / <%= chishop_rootdir %>/bin/django.wsgi
+	WSGIPassAuthorization On 
+	<Directory <%= chishop_rootdir %>>
+		Order allow,deny
+		Allow from all
+	</Directory>
+</VirtualHost>
+
+# this just redirects to the secured version
+<VirtualHost *:80>
+	ServerName <%= pipserver %>
+	ServerAdmin webmaster@bvox.net
+	
+	ErrorLog /var/log/apache2/<%= pipserver %>.error.log
+	CustomLog /var/log/apache2/<%= pipserver %>.access.log combined
+	
+	RewriteEngine on
+	RewriteCond %{SERVER_PORT} !^443$
+	RewriteRule ^.*$ https://%{SERVER_NAME}%{REQUEST_URI} [L,R]
+</VirtualHost>

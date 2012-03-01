@@ -1,0 +1,11 @@
+rvm use 1.9.3@puppet --create
+
+if ! command -v bundle ; then
+  gem install bundle --no-rdoc --no-ri
+  bundle
+fi
+
+alias vagrant=''
+alias irb=''
+unalias vagrant
+unalias irb
