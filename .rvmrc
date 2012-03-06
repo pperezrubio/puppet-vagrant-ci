@@ -5,6 +5,11 @@ if ! command -v bundle ; then
   bundle
 fi
 
+if ! command -v vagrant ; then
+  gem install bundle --no-rdoc --no-ri
+  bundle
+fi
+
 alias vagrant=''
 alias irb=''
 unalias vagrant
